@@ -1,6 +1,6 @@
 import pprint
 f = open('data1.txt')
-workitem_types = ["Fundamental", "Experience", "Scenario"]
+workitem_types = ["Fundamental", "Experience", "Scenario", "Value Proposition"]
 workitem_started = False
 data = []
 wi = {}
@@ -26,10 +26,17 @@ for row in f:
             allowFirstAppend = True
 
         wi = {}
-        wi['type'] = row.split(' ')[0]
-        wi['id'] = row.split(' ')[1]
-        if len(row.split(' ')) > 2:
-            pass
+        if row.startswith("Value Proposition"):
+            if len(row.split(' '))>2:
+                wi['id'] = row.split(' ')[2]
+            else:
+                wi['id'] = "None"
+            wi['type'] =  " ".join((row.split(' ')[0], row.split(' ')[1]))             
+        else:
+            wi['type'] = row.split(' ')[0]
+            wi['id'] = row.split(' ')[1]
+            if len(row.split(' ')) > 2:
+                pass
 
 # EOF, append last wi
 data.append(wi)
