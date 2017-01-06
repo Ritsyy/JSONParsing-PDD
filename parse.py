@@ -4,29 +4,26 @@ import re
 import string
 f = open('data1.txt')
 workitem_types = ["Fundamental", "Experience", "Scenario", "Value Proposition"]
-workitem_started = False
+description_started = False
 data = []
 wi = {}
 allowFirstAppend = False
 for row in f:
     
     if row.startswith("Supporting"):
-        value = row.strip().split(',')
+        description_started = True
         result = []
-        for i in value:
-            result.append(i.strip().split(' ')[-1])
+        for item in row.strip().split(','):
+            for i in item.split():
+                if i[0].isdigit():
+                    result.append(i)
         wi['supporting'] = result
-
-    # this needs to be at top, since we mark workitem_started later.
-    if workitem_started:
-        wi['description'] = row.strip()
-        workitem_started = False
 
     # check new workitem beggining
     workitem_starts = any([row.startswith(item) for item in workitem_types])
     if workitem_starts:
 
-        workitem_started = True
+        description_started = True
 
         if allowFirstAppend:
             data.append(wi)
@@ -34,6 +31,7 @@ for row in f:
             allowFirstAppend = True
 
         wi = {}
+        wi['description'] = ''
         if row.startswith("Value Proposition"):
             if len(row.strip().split(' '))>2:
                 wi['id'] = row.strip().split(' ')[2]
@@ -41,7 +39,7 @@ for row in f:
                 wi['id'] = "None"
             wi['type'] =  " ".join((row.strip().split(' ')[0], row.strip().split(' ')[1]))
             if len(row.strip().split(' ')) > 3:
-                if row.strip().split(' ')[3] == "--":
+                if row.strip().split(' ')[3] == "--" or row.strip().split(' ')[3] == "-":
                     result = " ".join(map(str, row.strip().split(' ')[4:]))
                     wi['title'] = result
         else:
@@ -54,9 +52,13 @@ for row in f:
                 else:
                     wi['priority'] = row.strip().split(' ')[2]
                 if len(row.strip().split(' ')) > 3:
-                    if row.strip().split(' ')[3] == "--":
+                    if row.strip().split(' ')[3] == "--" or  row.strip().split(' ')[3] == "-":
                         result = " ".join(map(str, row.strip().split(' ')[4:]))
                         wi['title'] = result
+        
+    if description_started and workitem_starts == False:
+        wi['description'] = wi['description'] + row.strip()
+
 
 # EOF, append last wi
 data.append(wi)
