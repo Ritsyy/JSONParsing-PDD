@@ -40,16 +40,22 @@ for row in f:
             else:
                 wi['id'] = "None"
             wi['type'] =  " ".join((row.strip().split(' ')[0], row.strip().split(' ')[1]))
+            if len(row.strip().split(' ')) > 3:
+                if row.strip().split(' ')[3] == "--":
+                    result = " ".join(map(str, row.strip().split(' ')[4:]))
+                    wi['title'] = result
         else:
             wi['type'] = row.strip().split(' ')[0]
             wi['id'] = row.strip().split(' ')[1]
             if len(row.strip().split(' ')) > 2:
-                pass
-
+                wi['priority'] = row.strip().split(' ')[2]
+                if len(row.strip().split(' ')) > 3:
+                    if row.strip().split(' ')[3] == "--":
+                        result = " ".join(map(str, row.strip().split(' ')[4:]))
+                        wi['title'] = result
 
 # EOF, append last wi
 data.append(wi)
-
 print json.dumps(data, ensure_ascii=False, encoding='utf8', indent=4)
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(data)
