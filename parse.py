@@ -11,7 +11,11 @@ allowFirstAppend = False
 for row in f:
     
     if row.startswith("Supporting"):
-        wi['supporting'] = row.strip().split(',')[0:]
+        value = row.strip().split(',')
+        result = []
+        for i in value:
+            result.append(i.strip().split(' ')[-1])
+        wi['supporting'] = result
 
     # this needs to be at top, since we mark workitem_started later.
     if workitem_started:
@@ -41,6 +45,7 @@ for row in f:
             wi['id'] = row.strip().split(' ')[1]
             if len(row.strip().split(' ')) > 2:
                 pass
+
 
 # EOF, append last wi
 data.append(wi)
