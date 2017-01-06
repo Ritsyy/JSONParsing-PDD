@@ -48,7 +48,11 @@ for row in f:
             wi['type'] = row.strip().split(' ')[0]
             wi['id'] = row.strip().split(' ')[1]
             if len(row.strip().split(' ')) > 2:
-                wi['priority'] = row.strip().split(' ')[2]
+                if row.strip().split(' ')[2] == "--":
+                    result = " ".join(map(str, row.strip().split(' ')[3:]))
+                    wi['title'] = result
+                else:
+                    wi['priority'] = row.strip().split(' ')[2]
                 if len(row.strip().split(' ')) > 3:
                     if row.strip().split(' ')[3] == "--":
                         result = " ".join(map(str, row.strip().split(' ')[4:]))
