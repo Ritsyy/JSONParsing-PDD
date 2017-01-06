@@ -11,7 +11,7 @@ allowFirstAppend = False
 for row in f:
     
     if row.startswith("Supporting"):
-        description_started = True
+        description_started = False
         result = []
         for item in row.strip().split(','):
             for i in item.split():
