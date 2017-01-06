@@ -10,7 +10,7 @@ wi = {}
 allowFirstAppend = False
 for row in f:
     
-    if row.startswith("Supporting"):
+    if row.strip().startswith("Supporting"):
         description_started = False
         result = []
         for item in row.strip().split(','):
